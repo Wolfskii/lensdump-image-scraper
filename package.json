@@ -1,6 +1,6 @@
 {
   "name": "lensdump-image-scraper",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Web scraper to fetch the image links from a Lensdump album-URL",
   "main": "index.js",
   "scripts": {

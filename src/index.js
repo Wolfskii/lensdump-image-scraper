@@ -3,67 +3,71 @@ import fetchCookie from 'fetch-cookie'
 import * as cheerio from 'cheerio'
 const fetch = fetchCookie(nodeFetch)
 
-/**
- * Scrapes data from an URL
- * @param {String} url - URL to scrape data from
- * @returns - Body/data of the URL
- */
-export default async function getImagesFromAlbumUrl (albumUrl) {
-  const html = await getHtmlContent(albumUrl) // Getting the HTML from the album-URL
-  const imageUrls = await getImagesFromAlbumHtml(html) // Getting the image-URLs from the album-HTML
+const lensdumpScraper = {
+  /**
+   * Scrapes data from an URL
+   * @param {String} url - URL to scrape data from
+   * @returns - Body/data of the URL
+   */
+  getImagesFromAlbumUrl: async function (albumUrl) {
+    const html = await this.getHtmlContent(albumUrl) // Getting the HTML from the album-URL
+    const imageUrls = await this.getImagesFromAlbumHtml(html) // Getting the image-URLs from the album-HTML
 
-  return imageUrls
-}
+    return imageUrls
+  },
 
-/**
- * Scrapes data from an URL
- * @param {String} url - URL to scrape data from
- * @returns - Body/data of the URL
- */
-async function getHtmlContent (url) {
-  const response = await fetch(url) // Getting the HTML-data from the url
-  const body = await response.text()
+  /**
+   * Scrapes data from an URL
+   * @param {String} url - URL to scrape data from
+   * @returns - Body/data of the URL
+   */
+  getHtmlContent: async function (url) {
+    const response = await fetch(url) // Getting the HTML-data from the url
+    const body = await response.text()
 
-  return body
-}
+    return body
+  },
 
-/**
- * Gets the full-res image-URL from a lower-res Lensdump image-URL
- * @param {string} lowResImgUrl - The low-res image-URL
- * @returns {string} The higher-res image-URL
- */
-function getHigherResImgUrl (lowResImgUrl) {
-  return lowResImgUrl.replace('.md', '')
-}
+  /**
+   * Gets the full-res image-URL from a lower-res Lensdump image-URL
+   * @param {string} lowResImgUrl - The low-res image-URL
+   * @returns {string} The higher-res image-URL
+   */
+  getHigherResImgUrl (lowResImgUrl) {
+    return lowResImgUrl.replace('.md', '')
+  },
 
-/**
- * Gets the image-URLs from the body/HTML provided
- * @param {Object} html - HTML/Body
- * @returns scraped image-URLs
- */
-async function getImagesFromAlbumHtml (html) {
-  const imageUrls = []
-  const getHigherRes = getHigherResImgUrl
+  /**
+   * Gets the image-URLs from the body/HTML provided
+   * @param {Object} html - HTML/Body
+   * @returns scraped image-URLs
+   */
+  async getImagesFromAlbumHtml (html) {
+    const imageUrls = []
+    const getHigherRes = this.getHigherResImgUrl
 
-  console.log('Fetching images from Album... ')
+    console.log('Fetching images from Album... ')
 
-  const $ = await cheerio.load(html)
-  const foundImageElements = $('.image-container img')
+    const $ = await cheerio.load(html)
+    const foundImageElements = $('.image-container img')
 
-  $(foundImageElements).each(function (i, link) {
-    let currUrl = $(this).attr('src') // Getting the URL of the current img
+    $(foundImageElements).each(function (i, link) {
+      let currUrl = $(this).attr('src') // Getting the URL of the current img
 
-    if (currUrl !== undefined) {
-      currUrl = getHigherRes(currUrl)
-      imageUrls.push(currUrl)
+      if (currUrl !== undefined) {
+        currUrl = getHigherRes(currUrl)
+        imageUrls.push(currUrl)
+      }
+    })
+
+    if (imageUrls.length > 0) {
+      console.log('OK\nImages found!')
+    } else {
+      console.log('No images found...')
     }
-  })
 
-  if (imageUrls.length > 0) {
-    console.log('OK\nImages found!')
-  } else {
-    console.log('No images found...')
+    return imageUrls
   }
-
-  return imageUrls
 }
+
+export default lensdumpScraper
