@@ -1,0 +1,35 @@
+{
+  "name": "lensdump-image-scraper",
+  "version": "1.0.0",
+  "description": "Web scraper to fetch the image links from a Lensdump album-URL",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "lint": "standard | snazzy || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wolfskii/lensdump-image-scraper.git"
+  },
+  "keywords": [
+    "lensdump",
+    "web-scraper"
+  ],
+  "author": "Dawid Kaleta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wolfskii/lensdump-image-scraper/issues"
+  },
+  "homepage": "https://github.com/Wolfskii/lensdump-image-scraper#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "fetch-cookie": "^2.1.0",
+    "node-fetch": "^3.2.10"
+  },
+  "devDependencies": {
+    "snazzy": "^9.0.0",
+    "standard": "^17.0.0"
+  },
+  "type": "module"
+}
