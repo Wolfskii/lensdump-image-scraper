@@ -16,11 +16,10 @@ exports.getImagesFromAlbumUrl = async function (albumUrl) {
 }
 
 /**
-   * Scrapes data from an URL
-   * @param {String} url - URL to scrape data from
-   * @returns - Body/data of the URL
-
-   */
+ * Scrapes data from an URL
+ * @param {String} url - URL to scrape data from
+ * @returns - Body/data of the URL
+ */
 exports.getHtmlContent = async function (url) {
   const response = await fetch(url) // Getting the HTML-data from the url
   const body = await response.text()
