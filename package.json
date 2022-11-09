@@ -2,7 +2,7 @@
   "name": "lensdump-image-scraper",
   "version": "1.0.0",
   "description": "Web scraper to fetch the image links from a Lensdump album-URL",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
