@@ -8,9 +8,9 @@ const fetch = fetchCookie(nodeFetch)
  * @param {String} url - URL to scrape data from
  * @returns - Body/data of the URL
  */
-export async function getImagesFromAlbumUrl (albumUrl) {
-  const html = await this.getHtmlContent(albumUrl) // Getting the HTML from the album-URL
-  const imageUrls = await this.getImagesFromAlbumHtml(html) // Getting the image-URLs from the album-HTML
+export default async function getImagesFromAlbumUrl (albumUrl) {
+  const html = await getHtmlContent(albumUrl) // Getting the HTML from the album-URL
+  const imageUrls = await getImagesFromAlbumHtml(html) // Getting the image-URLs from the album-HTML
 
   return imageUrls
 }
@@ -20,7 +20,7 @@ export async function getImagesFromAlbumUrl (albumUrl) {
  * @param {String} url - URL to scrape data from
  * @returns - Body/data of the URL
  */
-export async function getHtmlContent (url) {
+async function getHtmlContent (url) {
   const response = await fetch(url) // Getting the HTML-data from the url
   const body = await response.text()
 
@@ -28,13 +28,22 @@ export async function getHtmlContent (url) {
 }
 
 /**
+ * Gets the full-res image-URL from a lower-res Lensdump image-URL
+ * @param {string} lowResImgUrl - The low-res image-URL
+ * @returns {string} The higher-res image-URL
+ */
+function getHigherResImgUrl (lowResImgUrl) {
+  return lowResImgUrl.replace('.md', '')
+}
+
+/**
  * Gets the image-URLs from the body/HTML provided
  * @param {Object} html - HTML/Body
  * @returns scraped image-URLs
  */
-export async function getImagesFromAlbumHtml (html) {
+async function getImagesFromAlbumHtml (html) {
   const imageUrls = []
-  const getHigherResImgUrl = this.getHigherResImgUrl
+  const getHigherRes = getHigherResImgUrl
 
   console.log('Fetching images from Album... ')
 
@@ -45,7 +54,7 @@ export async function getImagesFromAlbumHtml (html) {
     let currUrl = $(this).attr('src') // Getting the URL of the current img
 
     if (currUrl !== undefined) {
-      currUrl = getHigherResImgUrl(currUrl)
+      currUrl = getHigherRes(currUrl)
       imageUrls.push(currUrl)
     }
   })
@@ -57,13 +66,4 @@ export async function getImagesFromAlbumHtml (html) {
   }
 
   return imageUrls
-}
-
-/**
- * Gets the full-res image-URL from a lower-res Lensdump image-URL
- * @param {string} lowResImgUrl - The low-res image-URL
- * @returns {string} The higher-res image-URL
- */
-export function getHigherResImgUrl (lowResImgUrl) {
-  return lowResImgUrl.replace('.md', '')
 }
