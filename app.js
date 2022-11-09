@@ -13,6 +13,8 @@ async function start(albumUrl) {
   // TODO: Make combining method directly in class
   const body = await webScraper.getContent(albumUrl) // Getting the HTML from the album-URL
   const imageUrls = await webScraper.getImagesFromAlbum(body) // Getting the image-URLs from the album-HTML
+
+  console.log(imageUrls)
 }
 
 start(testUrl)
